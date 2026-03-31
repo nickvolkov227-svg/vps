@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<title>Netrion VPS — Быстрый и стабильный облачный сервис</title>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=107025727', 'ym');
+    ym(107025727, 'init', {ssr:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/107025727" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --bg-card: #111118;
+    --bg-elevated: #1a1a24;
+    --accent: #3b82f6;
+    --accent-dim: rgba(59,130,246,0.12);
+    --accent-glow: rgba(59,130,246,0.4);
+    --green: #10b981;
+    --text: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-dim: #64748b;
+    --border: #1e293b;
+    --border-hover: #334155;
+    --container: 1200px;
+    --card-radius: 1.5rem;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+    position: relative;
+  }
+  body::before {
+    content: '';
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(ellipse 60% 40% at 50% 30%, rgba(59,130,246,0.08) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  body > * { position: relative; z-index: 1; }
+
+  .container {
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; }
+  .col-12 { grid-column: span 12; }
+  .col-8 { grid-column: span 8; }
+  .col-6 { grid-column: span 6; }
+  .col-4 { grid-column: span 4; }
+  .col-3 { grid-column: span 3; }
+  .col-start-3 { grid-column-start: 3; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    background: rgba(10,10,15,0.8);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-inner {
+    max-width: var(--container); margin: 0 auto; padding: 0 24px;
+    display: flex; justify-content: space-between; align-items: center;
+    height: 64px;
+  }
+  .nav-logo {
+    font-weight: 800; font-size: 1.1rem; letter-spacing: -0.02em;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 8px; align-items: center; }
+  .nav-support {
+    padding: 10px 20px; color: var(--text-secondary);
+    font-weight: 500; font-size: 0.875rem; border: 1px solid var(--border);
+    border-radius: 8px; cursor: pointer; text-decoration: none; transition: all 0.2s;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .nav-support:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+  .nav-cta {
+    padding: 10px 24px; background: linear-gradient(135deg, var(--accent), #2563eb);
+    color: #ffffff;
+    font-weight: 600; font-size: 0.875rem; border: none; border-radius: 8px;
+    cursor: pointer; text-decoration: none; transition: all 0.3s;
+    box-shadow: 0 2px 8px rgba(59,130,246,0.2);
+  }
+  .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(59,130,246,0.4); }
+
+  /* HERO */
+  .hero {
+    padding: 160px 0 120px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: -200px; left: 50%; transform: translateX(-50%);
+    width: 800px; height: 600px;
+    background: radial-gradient(ellipse, var(--accent-glow) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-content { text-align: center; position: relative; z-index: 1; }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 16px; background: var(--accent-dim);
+    border: 1px solid rgba(59,130,246,0.3); border-radius: 100px;
+    font-size: 0.8rem; font-weight: 500; color: var(--accent);
+    margin-bottom: 32px;
+    backdrop-filter: blur(4px);
+  }
+  .hero-badge::before {
+    content: ''; width: 6px; height: 6px; background: var(--green);
+    border-radius: 50%; animation: pulse-dot 2s infinite;
+  }
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(1.2); }
+  }
+
+  .hero h1 {
+    font-size: clamp(2.5rem, 5.5vw, 4.5rem);
+    font-weight: 800; letter-spacing: -0.03em;
+    line-height: 1.1; margin-bottom: 24px;
+    background: linear-gradient(135deg, #fff, var(--accent), #60a5fa);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 1.2rem; color: var(--text-secondary);
+    max-width: 540px; margin: 0 auto 48px; font-weight: 400; line-height: 1.7;
+  }
+
+  .hero-cta {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 16px 40px; background: linear-gradient(135deg, var(--accent), #2563eb);
+    color: #ffffff;
+    font-weight: 700; font-size: 1rem; border: none; border-radius: 12px;
+    cursor: pointer; text-decoration: none; transition: all 0.3s;
+    box-shadow: 0 4px 12px rgba(59,130,246,0.3);
+  }
+  .hero-cta:hover { box-shadow: 0 8px 24px rgba(59,130,246,0.5); transform: translateY(-2px); }
+  .hero-cta svg { width: 18px; height: 18px; }
+
+  /* METRICS */
+  .metrics { padding: 80px 0; border-top: 1px solid var(--border); }
+  .metrics-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+  }
+  .metric-card {
+    text-align: center; padding: 32px 16px;
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px;
+    transition: all 0.3s;
+  }
+  .metric-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px -12px rgba(0,0,0,0.5);
+  }
+  .metric-value {
+    font-size: clamp(1.2rem, 2.5vw, 1.7rem); font-weight: 800; letter-spacing: -0.02em;
+    color: var(--text); margin-bottom: 8px; white-space: nowrap;
+  }
+  .metric-label {
+    font-size: 0.82rem; color: var(--text-dim); font-weight: 400;
+    line-height: 1.5; letter-spacing: 0;
+  }
+
+  /* FEATURES */
+  .features { padding: 100px 0; }
+  .section-header { margin-bottom: 64px; }
+  .section-overline {
+    font-size: 0.8rem; font-weight: 600; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px;
+  }
+  .section-title {
+    font-size: clamp(1.75rem, 3vw, 2.5rem); font-weight: 800;
+    letter-spacing: -0.02em; line-height: 1.2;
+  }
+
+  .feature-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 36px 28px;
+    transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+  .feature-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; width: 100%; height: 4px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.4s;
+  }
+  .feature-card:hover::before {
+    transform: scaleX(1);
+  }
+  .feature-card:hover {
+    border-color: var(--border-hover);
+    background: var(--bg-elevated);
+    transform: translateY(-6px);
+    box-shadow: 0 20px 30px -12px rgba(0,0,0,0.4);
+  }
+
+  .feature-icon {
+    width: 48px; height: 48px; border-radius: 16px;
+    background: var(--accent-dim);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem; margin-bottom: 20px;
+    transition: transform 0.2s;
+  }
+  .feature-card:hover .feature-icon {
+    transform: scale(1.05);
+  }
+
+  .feature-title {
+    font-size: 1.1rem; font-weight: 700; margin-bottom: 10px;
+    letter-spacing: -0.01em;
+  }
+  .feature-desc {
+    font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7; font-weight: 400;
+  }
+
+  /* PRICING */
+  .pricing { padding: 100px 0; scroll-margin-top: 80px; }
+
+  .price-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    padding: 32px 24px;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    display: flex; flex-direction: column;
+    backdrop-filter: blur(4px);
+  }
+  .price-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-6px);
+    box-shadow: 0 20px 30px -15px rgba(0,0,0,0.4);
+  }
+  .price-card.selected {
+    border-color: var(--accent);
+    background: linear-gradient(145deg, rgba(59,130,246,0.08), var(--bg-card));
+    box-shadow: 0 0 0 1px rgba(59,130,246,0.3), 0 8px 20px -8px rgba(59,130,246,0.2);
+  }
+  .price-card--pop::after {
+    content: 'Популярный';
+    position: absolute; top: 12px; right: 12px;
+    font-size: 0.7rem; font-weight: 600;
+    background: linear-gradient(135deg, var(--accent), #2563eb);
+    color: #ffffff;
+    padding: 4px 10px; border-radius: 20px;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+
+  .price-period {
+    font-size: 0.85rem; font-weight: 500; color: var(--text-dim);
+    margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.05em;
+    padding-top: 20px;
+  }
+  .price-value {
+    font-size: 2.2rem; font-weight: 800; letter-spacing: -0.03em;
+    margin-bottom: 4px;
+  }
+  .price-value span { font-size: 0.9rem; font-weight: 500; color: var(--text-dim); }
+  .price-per {
+    font-size: 0.85rem; color: var(--text-dim); margin-bottom: 24px;
+  }
+  .price-features {
+    list-style: none; flex-grow: 1; margin-bottom: 0;
+  }
+  .price-features li {
+    padding: 8px 0; font-size: 0.9rem; color: var(--text-secondary);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .price-features li::before {
+    content: '✓'; color: var(--green); font-weight: 700; font-size: 0.85rem;
+  }
+
+  .check-dot {
+    position: absolute; top: 12px; left: 12px;
+    width: 20px; height: 20px; border-radius: 50%;
+    border: 2px solid var(--border); transition: all 0.2s;
+  }
+  .price-card.selected .check-dot {
+    background: var(--accent); border-color: var(--accent);
+    box-shadow: 0 0 8px var(--accent-glow);
+  }
+  .price-card.selected .check-dot::after {
+    content: '✓'; color: var(--bg); font-size: 11px; font-weight: 900;
+    display: flex; align-items: center; justify-content: center;
+    width: 100%; height: 100%;
+  }
+
+  /* ORDER (оплата через Telegram) */
+  .order { padding: 0 0 100px; }
+  .order-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    padding: 48px 40px;
+    backdrop-filter: blur(4px);
+    transition: all 0.3s;
+    text-align: center;
+  }
+  .order-box:hover {
+    border-color: var(--accent);
+  }
+  .order-title {
+    font-size: 1.3rem; font-weight: 700; margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .order-subtitle {
+    font-size: 0.9rem; color: var(--text-dim); margin-bottom: 32px;
+  }
+  .tg-pay-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(135deg, var(--accent), #2563eb);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 14px 32px;
+    border-radius: 40px;
+    text-decoration: none;
+    transition: all 0.3s;
+    box-shadow: 0 4px 12px rgba(59,130,246,0.3);
+  }
+  .tg-pay-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(59,130,246,0.5);
+  }
+
+  /* CTA BOTTOM */
+  .cta-bottom { padding: 80px 0; text-align: center; border-top: 1px solid var(--border); }
+  .cta-bottom p { color: var(--text-dim); font-size: 0.95rem; margin-bottom: 20px; }
+  .tg-btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 12px 28px; font-size: 0.875rem; font-weight: 600;
+    text-decoration: none; border: 1px solid var(--border);
+    color: var(--text-secondary); border-radius: 10px; transition: all 0.2s;
+  }
+  .tg-btn:hover { border-color: var(--text-dim); color: var(--text); }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border); padding: 32px 0;
+  }
+  .footer-inner {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.8rem; color: var(--text-dim);
+  }
+  .footer-logo { font-weight: 700; color: var(--text-secondary); }
+
+  /* CONTACT */
+  .contact { padding: 80px 0; border-top: 1px solid var(--border); scroll-margin-top: 80px; }
+  .contact-box {
+    max-width: 560px; margin: 0 auto;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    padding: 48px 36px;
+    backdrop-filter: blur(4px);
+  }
+  .contact-box .section-overline { text-align: center; }
+  .contact-title {
+    font-size: 1.3rem; font-weight: 700; margin-bottom: 8px;
+    text-align: center; letter-spacing: -0.01em;
+  }
+  .contact-sub {
+    font-size: 0.9rem; color: var(--text-dim); text-align: center;
+    margin-bottom: 32px; line-height: 1.6;
+  }
+  .contact-form { display: flex; flex-direction: column; gap: 16px; }
+  .contact-row { display: flex; gap: 16px; }
+  .contact-group { flex: 1; }
+  .contact-textarea {
+    width: 100%; padding: 14px 16px; min-height: 120px; resize: vertical;
+    background: rgba(10,10,15,0.6); border: 1px solid var(--border);
+    border-radius: 14px; color: var(--text);
+    font-family: 'Inter', sans-serif; font-size: 0.95rem;
+    outline: none; transition: border-color 0.2s; line-height: 1.6;
+  }
+  .contact-textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(59,130,246,0.2); }
+  .contact-textarea::placeholder { color: var(--text-dim); }
+  .contact-btn {
+    width: 100%; padding: 14px; background: linear-gradient(135deg, var(--accent), #2563eb);
+    color: #ffffff;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem; font-weight: 700; border: none; border-radius: 16px;
+    cursor: pointer; transition: all 0.3s;
+  }
+  .contact-btn:hover { box-shadow: 0 8px 20px rgba(59,130,246,0.4); transform: translateY(-1px); }
+  .contact-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+  .contact-btn .spinner {
+    display: inline-block; width: 16px; height: 16px;
+    border: 2px solid #ffffff; border-top-color: transparent;
+    border-radius: 50%; animation: spin 0.8s linear infinite;
+    vertical-align: middle; margin-right: 8px;
+  }
+  .contact-success {
+    text-align: center; padding: 24px; color: var(--green);
+    font-weight: 600; font-size: 0.95rem; display: none;
+  }
+  .contact-error {
+    color: #ef4444; font-size: 0.85rem; text-align: center; display: none; margin-top: 4px;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-up { animation: fadeUp 0.6s ease-out both; }
+  .fade-up-d1 { animation-delay: 0.1s; }
+  .fade-up-d2 { animation-delay: 0.2s; }
+  .fade-up-d3 { animation-delay: 0.3s; }
+
+  /* RESPONSIVE */
+  @media (max-width: 1024px) {
+    .col-3, .col-4, .col-6 { grid-column: span 6; }
+    .col-start-3 { grid-column-start: auto; }
+    .col-8 { grid-column: span 12; }
+  }
+  @media (max-width: 640px) {
+    .col-3, .col-4, .col-6 { grid-column: span 6; }
+    .grid { gap: 12px; }
+    .hero { padding: 100px 0 48px; }
+    .hero h1 { font-size: 1.8rem; margin-bottom: 16px; }
+    .hero-sub { font-size: 1rem; margin-bottom: 32px; }
+    .hero-badge { margin-bottom: 20px; font-size: 0.75rem; }
+    .hero-cta { padding: 14px 32px; font-size: 0.9rem; }
+    .metrics { padding: 40px 0; }
+    .metrics-grid { grid-template-columns: 1fr; gap: 10px; }
+    .metric-card { padding: 20px 12px; }
+    .metric-value { font-size: 1.6rem; }
+    .metric-label { font-size: 0.7rem; }
+    .features { padding: 48px 0; }
+    .section-header { margin-bottom: 32px; }
+    .section-title { font-size: 1.4rem; }
+    .section-overline { font-size: 0.7rem; margin-bottom: 8px; }
+    .feature-card { padding: 24px 20px; }
+    .feature-icon { width: 40px; height: 40px; font-size: 1.1rem; margin-bottom: 14px; }
+    .feature-title { font-size: 1rem; }
+    .feature-desc { font-size: 0.85rem; }
+    .pricing { padding: 48px 0; }
+    .price-card { padding: 24px 18px; }
+    .price-period { font-size: 0.8rem; margin-bottom: 10px; }
+    .price-value { font-size: 1.8rem; }
+    .price-per { margin-bottom: 16px; }
+    .price-features li { padding: 5px 0; font-size: 0.85rem; }
+    .order { padding: 0 0 48px; }
+    .order-box { padding: 28px 18px; }
+    .order-title { font-size: 1.1rem; }
+    .order-subtitle { font-size: 0.85rem; margin-bottom: 20px; }
+    .cta-bottom { padding: 48px 0; }
+    .contact { padding: 48px 0; }
+    .contact-box { padding: 28px 18px; }
+    .contact-row { flex-direction: column; }
+    footer { padding: 24px 0; }
+    .nav-inner { padding: 0 16px; gap: 8px; }
+    .container { padding: 0 16px; }
+    .nav-support span { display: none; }
+    .nav-support { padding: 8px 12px; }
+    .nav-cta { padding: 8px 16px; font-size: 0.8rem; }
+    .nav-links { gap: 6px; }
+  }
+  @media (max-width: 420px) {
+    .col-3, .col-4, .col-6 { grid-column: span 12; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Netrion<span>VPS</span></a>
+    <div class="nav-links">
+      <a href="index.html#contact" class="nav-support">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span>Поддержка</span>
+      </a>
+      <a href="instructions.html" class="nav-support">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span>Инструкция</span>
+      </a>
+      <a href="index.html#pricing" class="nav-cta">Подключить</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-content fade-up">
+      <div class="hero-badge">Работает 24/7</div>
+      <h1>Быстрый и стабильный<br>интернет без тормозов</h1>
+      <p class="hero-sub">Сервис для тех, кому важна скорость и стабильность. Подключение за 2 минуты.</p>
+      <a href="#pricing" class="hero-cta">
+        Выбрать тариф
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- METRICS -->
+<section class="metrics">
+  <div class="container">
+    <div class="metrics-grid">
+      <div class="metric-card fade-up">
+        <div class="metric-value">🚀 Самый быстрый</div>
+        <div class="metric-label">Ускоряем загрузку сайтов, видео и приложений за счёт оптимизации маршрутов</div>
+      </div>
+      <div class="metric-card fade-up fade-up-d1">
+        <div class="metric-value">🛡️ Защита 24/7</div>
+        <div class="metric-label">Фильтрация вредоносного трафика и защита от фишинга в реальном времени</div>
+      </div>
+      <div class="metric-card fade-up fade-up-d2">
+        <div class="metric-value">📶 Стабильность</div>
+        <div class="metric-label">Работает без обрывов даже при слабом или перегруженном интернете</div>
+      </div>
+      <div class="metric-card fade-up fade-up-d3">
+        <div class="metric-value">⚡ 2 минуты</div>
+        <div class="metric-label">Без настроек — установил и сразу пользуешься</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features">
+  <div class="container">
+    <div class="grid">
+      <div class="col-8 section-header">
+        <div class="section-overline">Почему мы</div>
+        <h2 class="section-title">Подключил — и забыл о блокировках</h2>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-4 fade-up">
+        <div class="feature-card">
+          <div class="feature-icon">🚀</div>
+          <div class="feature-title">Никаких задержек</div>
+          <div class="feature-desc">Видео, стримы и звонки работают плавно без задержек и зависаний.</div>
+        </div>
+      </div>
+      <div class="col-4 fade-up fade-up-d1">
+        <div class="feature-card">
+          <div class="feature-icon">🔒</div>
+          <div class="feature-title">Стабильная сеть</div>
+          <div class="feature-desc">Соединение не обрывается — дома, в дороге или в общественных сетях.</div>
+        </div>
+      </div>
+      <div class="col-4 fade-up fade-up-d2">
+        <div class="feature-card">
+          <div class="feature-icon">🌍</div>
+          <div class="feature-title">Серверы по всему миру</div>
+          <div class="feature-desc">Минимальная задержка и высокая скорость из любой точки.</div>
+        </div>
+      </div>
+      <div class="col-4 fade-up">
+        <div class="feature-card">
+          <div class="feature-icon">📱</div>
+          <div class="feature-title">Работает на всех устройствах</div>
+          <div class="feature-desc">Телефон, ноутбук, планшет — одна подписка на всё.</div>
+        </div>
+      </div>
+      <div class="col-4 fade-up fade-up-d1">
+        <div class="feature-card">
+          <div class="feature-icon">♾️</div>
+          <div class="feature-title">Без сложных настроек</div>
+          <div class="feature-desc">Всё уже настроено — просто подключился и пользуешься.</div>
+        </div>
+      </div>
+      <div class="col-4 fade-up fade-up-d2">
+        <div class="feature-card">
+          <div class="feature-icon">💬</div>
+          <div class="feature-title">Поддержка в Telegram 24/7</div>
+          <div class="feature-desc">Ответим быстро и поможем настроить за пару минут.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="reviews" style="padding:80px 0;border-top:1px solid var(--border);">
+  <div class="container">
+    <div class="grid">
+      <div class="col-8 section-header">
+        <div class="section-overline">Отзывы</div>
+        <h2 class="section-title">Что говорят наши клиенты</h2>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-4 fade-up">
+        <div class="feature-card" style="display:flex;flex-direction:column;gap:16px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:36px;height:36px;border-radius:50%;background:var(--accent-dim);display:flex;align-items:center;justify-content:center;font-size:0.9rem;font-weight:700;color:var(--accent);">А</div>
+            <div>
+              <div style="font-size:0.9rem;font-weight:600;">Ольга</div>
+              <div style="font-size:0.75rem;color:var(--text-dim);">Пользуется 4 месяца</div>
+            </div>
+          </div>
+          <div style="font-size:0.88rem;color:var(--text-secondary);line-height:1.7;">Сначала сомневалась, но оказалось всё очень просто и удобно. Интерфейс понятный, а поддержка реально помогает. Отличный сервис!</div>
+          <div style="display:flex;gap:2px;font-size:0.85rem;">⭐⭐⭐⭐⭐</div>
+        </div>
+      </div>
+      <div class="col-4 fade-up fade-up-d1">
+        <div class="feature-card" style="display:flex;flex-direction:column;gap:16px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:36px;height:36px;border-radius:50%;background:var(--accent-dim);display:flex;align-items:center;justify-content:center;font-size:0.9rem;font-weight:700;color:var(--accent);">М</div>
+            <div>
+              <div style="font-size:0.9rem;font-weight:600;">Игорь</div>
+              <div style="font-size:0.75rem;color:var(--text-dim);">Пользуется 2 месяца</div>
+            </div>
+          </div>
+          <div style="font-size:0.88rem;color:var(--text-secondary);line-height:1.7;">Настроил всё буквально за пару минут. Работает быстро и без зависаний, даже при большой нагрузке. Очень доволен, буду пользоваться дальше!</div>
+          <div style="display:flex;gap:2px;font-size:0.85rem;">⭐⭐⭐⭐⭐</div>
+        </div>
+      </div>
+      <div class="col-4 fade-up fade-up-d2">
+        <div class="feature-card" style="display:flex;flex-direction:column;gap:16px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:36px;height:36px;border-radius:50%;background:var(--accent-dim);display:flex;align-items:center;justify-content:center;font-size:0.9rem;font-weight:700;color:var(--accent);">Д</div>
+            <div>
+              <div style="font-size:0.9rem;font-weight:600;">Сергей</div>
+              <div style="font-size:0.75rem;color:var(--text-dim);">Пользуется 1 месяц</div>
+            </div>
+          </div>
+          <div style="font-size:0.88rem;color:var(--text-secondary);line-height:1.7;">Перепробовал несколько вариантов — этот оказался самым надёжным. Скорость отличная, соединение стабильное. Рекомендую всем!</div>
+          <div style="display:flex;gap:2px;font-size:0.85rem;">⭐⭐⭐⭐⭐</div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:40px;">
+      <a href="https://t.me/netriovpsotzyv" target="_blank" style="display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border:1px solid var(--border);border-radius:10px;color:var(--text-secondary);font-size:0.88rem;font-weight:500;text-decoration:none;transition:all 0.2s;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        Все отзывы в Telegram
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="container">
+    <div class="grid">
+      <div class="col-8 section-header">
+        <div class="section-overline">Тарифы</div>
+        <h2 class="section-title">Выберите подходящий план</h2>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-3">
+        <div class="price-card" data-tariff="1" data-amount="299" onclick="selectTariff(this)">
+          <div class="check-dot"></div>
+          <div class="price-period">1 месяц</div>
+          <div class="price-value">299 <span>₽</span></div>
+          <div class="price-per">в месяц</div>
+          <ul class="price-features">
+            <li>Оптимизация сети</li>
+            <li>Высокая скорость</li>
+            <li>4 устройства</li>
+            <li>Поддержка 24/7</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="price-card" data-tariff="3" data-amount="749" onclick="selectTariff(this)">
+          <div class="check-dot"></div>
+          <div class="price-period">3 месяца</div>
+          <div class="price-value">749 <span>₽</span></div>
+          <div class="price-per">~250 ₽/мес</div>
+          <ul class="price-features">
+            <li>Оптимизация сети</li>
+            <li>Высокая скорость</li>
+            <li>4 устройства</li>
+            <li>Поддержка 24/7</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="price-card selected" data-tariff="6" data-amount="1290" onclick="selectTariff(this)">
+          <div class="check-dot"></div>
+          <div class="price-period">6 месяцев</div>
+          <div class="price-value">1 290 <span>₽</span></div>
+          <div class="price-per">~215 ₽/мес</div>
+          <ul class="price-features">
+            <li>Оптимизация сети</li>
+            <li>Высокая скорость</li>
+            <li>4 устройства</li>
+            <li>Поддержка 24/7</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="price-card" data-tariff="12" data-amount="1990" onclick="selectTariff(this)">
+          <div class="check-dot"></div>
+          <div class="price-period">12 месяцев</div>
+          <div class="price-value">1 990 <span>₽</span></div>
+          <div class="price-per">~166 ₽/мес</div>
+          <ul class="price-features">
+            <li>Оптимизация сети</li>
+            <li>Высокая скорость</li>
+            <li>4 устройства</li>
+            <li>Поддержка 24/7</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ORDER (оплата через Telegram) -->
+<section class="order" id="order">
+  <div class="container">
+    <div class="grid">
+      <div class="col-12">
+        <div class="order-box" style="max-width:640px;margin:0 auto;">
+          <div class="order-title">Оплата через Telegram</div>
+          <div class="order-subtitle">
+            Вы выбрали тариф на <span id="selectedPeriod">6 месяцев</span> — 
+            <strong id="selectedAmountDisplay" style="color:var(--accent);">1 290 ₽</strong>
+          </div>
+          <div style="margin: 1.5rem 0;">
+            <a href="https://t.me/netriovpspay_bot" target="_blank" class="tg-pay-btn">
+              💬 Оплатить в Telegram
+            </a>
+          </div>
+          <div style="font-size:0.85rem; color:var(--text-dim);">
+            После оплаты ключ придёт в Telegram, а также на вашу почту.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="order-box" style="max-width:640px;margin:0 auto;">
+    <div class="order-title">Поддержка через Telegram</div>
+    <div class="order-subtitle">
+      Есть вопрос или нужна помощь? Напишите нам — ответим максимально быстро
+    </div>
+    <div style="margin: 1.5rem 0;">
+      <a href="https://t.me/netriovps_support" target="_blank" class="tg-pay-btn">
+        💬 Написать в Telegram
+      </a>
+    </div>
+    <div style="font-size:0.85rem; color:var(--text-dim);">
+      Обычно отвечаем в течение 5–10 минут
+    </div>
+  </div>
+</section>
+
+<!-- LEGAL NOTICE -->
+<section style="padding:40px 0 40px;">
+  <div class="container">
+    <div style="max-width:800px;margin:0 auto 0;background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.2);border-radius:18px;padding:20px 28px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+      <div style="width:40px;height:40px;border-radius:12px;background:rgba(59,130,246,0.12);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;">⚖️</div>
+      <div style="flex:1;min-width:200px;">
+        <div style="font-size:0.92rem;font-weight:700;color:var(--text);margin-bottom:2px;">Работаем строго в рамках законодательства РФ</div>
+        <div style="font-size:0.82rem;color:var(--text-dim);line-height:1.6;">Сервис предназначен для оптимизации сетевого соединения и повышения стабильности работы в интернете. Мы соблюдаем все требования действующего законодательства Российской Федерации.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div style="padding:48px 0 32px;border-top:1px solid var(--border);">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:32px;">
+        
+        <div>
+          <div style="font-weight:800;font-size:1.1rem;margin-bottom:8px;">Netrion<span style="color:var(--accent);">VPS</span></div>
+          <div style="font-size:0.82rem;color:var(--text-dim);max-width:260px;line-height:1.6;">Облачный сервис для стабильной и быстрой работы в сети. Работаем с 2024 года.</div>
+        </div>
+
+        <div style="display:flex;gap:48px;flex-wrap:wrap;">
+          <div>
+            <div style="font-size:0.75rem;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px;">Связаться</div>
+            <a href="https://t.me/netriovps_support" target="_blank" style="display:flex;align-items:center;gap:6px;font-size:0.85rem;color:var(--text-dim);text-decoration:none;margin-bottom:8px;transition:color 0.2s;">
+              💬 Поддержка в Telegram
+            </a>
+            <a href="https://t.me/netriovpspay_bot" target="_blank" style="display:flex;align-items:center;gap:6px;font-size:0.85rem;color:var(--text-dim);text-decoration:none;transition:color 0.2s;">
+              🤖 Telegram-бот
+            </a>
+          </div>
+          <div>
+            <div style="font-size:0.75rem;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px;">Гарантии</div>
+            <div style="font-size:0.85rem;color:var(--text-dim);line-height:1.8;">
+              🔗 Стабильная работа<br>
+              ⚡ Моментальная выдача<br>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div style="margin-top:36px;padding-top:24px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+        <div style="font-size:0.78rem;color:var(--text-dim);">© 2026 Netrion VPS — все права защищены</div>
+        <div style="display:flex;align-items:center;gap:16px;">
+          <a href="/terms.html" style="font-size:0.78rem;color:var(--text-dim);text-decoration:none;">Пользовательское соглашение</a>
+          <span style="font-size:0.78rem;color:var(--text-dim);">🌍 Глобальная сеть</span>
+          <span style="font-size:0.78rem;color:var(--text-dim);">👥 1 000+ клиентов</span>
+          <span style="font-size:0.78rem;color:var(--text-dim);">⭐ 4.9 рейтинг</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+let selectedTariff = '6';
+let selectedAmount = 1290;
+
+function selectTariff(card) {
+  document.querySelectorAll('.price-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+  selectedTariff = card.dataset.tariff;
+  selectedAmount = parseInt(card.dataset.amount);
+  document.getElementById('selectedAmountDisplay').textContent = selectedAmount.toLocaleString('ru-RU') + ' ₽';
+  const periodText = card.querySelector('.price-period').innerText;
+  document.getElementById('selectedPeriod').innerText = periodText.toLowerCase();
+  document.getElementById('order').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+</script>
+</body>
+</html>

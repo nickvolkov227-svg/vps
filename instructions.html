@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<title>Инструкция — Netrion VPS</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --bg-card: #111118;
+    --bg-elevated: #1a1a24;
+    --accent: #3b82f6;
+    --accent-dim: rgba(59,130,246,0.12);
+    --accent-glow: rgba(59,130,246,0.4);
+    --green: #10b981;
+    --green-glow: rgba(16,185,129,0.1);
+    --orange: #f59e0b;
+    --orange-glow: rgba(245,158,11,0.08);
+    --blue: #60a5fa;
+    --blue-glow: rgba(96,165,250,0.1);
+    --text: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-dim: #64748b;
+    --border: #1e293b;
+    --border-hover: #334155;
+    --card-radius: 1.5rem;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+    min-height: 100vh;
+    position: relative;
+  }
+  body::before {
+    content: '';
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(ellipse 60% 40% at 50% 30%, rgba(59,130,246,0.08) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  body > * { position: relative; z-index: 1; }
+
+  .container { max-width: 680px; margin: 0 auto; padding: 0 20px; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    background: rgba(10,10,15,0.8);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-inner {
+    max-width: 680px; margin: 0 auto; padding: 0 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    height: 64px;
+  }
+  .nav-logo {
+    font-weight: 800; font-size: 1.1rem; letter-spacing: -0.02em;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 8px; }
+  .nav-link {
+    padding: 8px 16px; color: var(--text-dim);
+    font-weight: 500; font-size: 0.875rem; border: 1px solid var(--border);
+    border-radius: 8px; text-decoration: none; transition: all 0.2s;
+  }
+  .nav-link:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+
+  /* HEADER */
+  .page-header {
+    padding: 120px 0 32px;
+    text-align: center;
+    position: relative;
+  }
+  .page-header::before {
+    content: '';
+    position: absolute; top: 56px; left: 50%; transform: translateX(-50%);
+    width: 500px; height: 300px;
+    background: radial-gradient(ellipse, var(--accent-glow) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 16px; margin-bottom: 24px;
+    background: var(--accent-dim); border: 1px solid rgba(59,130,246,0.3);
+    border-radius: 100px; font-size: 0.8rem; font-weight: 500;
+    color: var(--accent); backdrop-filter: blur(4px);
+  }
+  .header-badge svg { width: 14px; height: 14px; }
+  .page-header h1 {
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    font-weight: 800; letter-spacing: -0.03em;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, #fff, var(--accent), #60a5fa);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .page-sub { font-size: 1rem; color: var(--text-dim); font-weight: 500; }
+
+  /* STEPS */
+  .steps { padding: 24px 0 40px; }
+
+  .step {
+    position: relative;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    padding: 32px 28px;
+    margin-bottom: 20px;
+    transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+  }
+  .step:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 30px -12px rgba(0,0,0,0.4);
+  }
+
+  .step-header {
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: 20px;
+  }
+  .step-num {
+    width: 44px; height: 44px; border-radius: 20px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem; font-weight: 800; flex-shrink: 0;
+    background: var(--accent-dim);
+    color: var(--accent);
+    border: 1px solid rgba(59,130,246,0.3);
+  }
+  .step-title { font-size: 1.2rem; font-weight: 700; letter-spacing: -0.01em; }
+  .step-text { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7; }
+
+  /* APP SECTIONS */
+  .app-section {
+    margin-top: 20px; padding: 20px;
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 20px;
+    transition: border-color 0.2s;
+  }
+  .app-section:hover { border-color: var(--border-hover); }
+  .app-section-label {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 0.75rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin-bottom: 16px; padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .app-section-label .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+  }
+  .dot-green { background: var(--green); box-shadow: 0 0 6px var(--green); }
+  .dot-blue { background: var(--blue); box-shadow: 0 0 6px var(--blue); }
+  .dot-accent { background: var(--accent); box-shadow: 0 0 6px var(--accent); }
+
+  .app-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  }
+  .app-grid-3 {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;
+  }
+  .app-btn {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 16px;
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 14px; text-decoration: none; color: var(--text);
+    transition: all 0.25s;
+  }
+  .app-btn:hover {
+    border-color: var(--accent);
+    background: var(--accent-dim);
+    transform: translateY(-2px);
+  }
+  .app-icon {
+    width: 40px; height: 40px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; flex-shrink: 0;
+    background: var(--bg-elevated);
+  }
+  .app-label { font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 600; }
+  .app-name { font-size: 0.85rem; font-weight: 700; letter-spacing: -0.01em; }
+
+  .app-note {
+    margin-top: 12px; padding: 12px 16px;
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 12px; font-size: 0.8rem; color: var(--text-dim); line-height: 1.6;
+  }
+  .app-note strong { color: var(--text-secondary); font-weight: 600; }
+
+  /* HINTS & WARNINGS */
+  .hint {
+    margin-top: 16px; padding: 14px 18px;
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 16px; font-size: 0.85rem; color: var(--text-dim); line-height: 1.7;
+  }
+  .hint strong { color: var(--text-secondary); font-weight: 600; }
+
+  .warn {
+    margin-top: 16px; padding: 14px 18px;
+    background: var(--orange-glow);
+    border: 1px solid rgba(245,158,11,0.2);
+    border-radius: 16px;
+    font-size: 0.85rem; color: var(--text-secondary); line-height: 1.7;
+  }
+  .warn-icon { font-size: 1rem; margin-right: 6px; }
+
+  /* DONE BLOCK */
+  .done {
+    text-align: center; padding: 40px 32px;
+    background: linear-gradient(135deg, var(--bg-card), var(--bg-elevated));
+    border: 1px solid rgba(16,185,129,0.2);
+    border-radius: 28px; margin-bottom: 48px;
+    position: relative; overflow: hidden;
+  }
+  .done::before {
+    content: '';
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 240px; height: 100px;
+    background: radial-gradient(ellipse, rgba(16,185,129,0.15) 0%, transparent 70%);
+  }
+  .done-icon { font-size: 2.5rem; margin-bottom: 12px; position: relative; }
+  .done-title { font-size: 1.2rem; font-weight: 800; color: var(--green); margin-bottom: 8px; position: relative; }
+  .done-text { font-size: 0.88rem; color: var(--text-dim); position: relative; }
+
+  /* HELP SECTION */
+  .help {
+    text-align: center; padding: 48px 0 64px;
+    border-top: 1px solid var(--border);
+  }
+  .help-title { font-size: 0.9rem; color: var(--text-dim); margin-bottom: 20px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+  .help-links { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+  .help-link {
+    padding: 10px 24px; border: 1px solid var(--border);
+    border-radius: 40px; text-decoration: none;
+    color: var(--text-secondary); font-size: 0.85rem; font-weight: 600;
+    transition: all 0.25s;
+  }
+  .help-link:hover { border-color: var(--accent); color: var(--text); background: var(--accent-dim); transform: translateY(-1px); }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border); padding: 24px 0;
+  }
+  .footer-inner {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.78rem; color: var(--text-dim);
+  }
+  .footer-logo { font-weight: 800; letter-spacing: -0.02em; }
+  .footer-logo span { color: var(--accent); }
+
+  /* RESPONSIVE */
+  @media (max-width: 640px) {
+    .page-header { padding: 100px 0 24px; }
+    .step { padding: 24px 20px; }
+    .app-grid, .app-grid-3 { grid-template-columns: 1fr; }
+    .help-links { flex-direction: column; align-items: center; gap: 8px; }
+    .footer-inner { flex-direction: column; gap: 8px; text-align: center; }
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .step { animation: fadeUp 0.5s ease both; }
+  .step:nth-child(1) { animation-delay: 0.05s; }
+  .step:nth-child(2) { animation-delay: 0.1s; }
+  .step:nth-child(3) { animation-delay: 0.15s; }
+  .step:nth-child(4) { animation-delay: 0.2s; }
+  .done { animation: fadeUp 0.5s ease 0.25s both; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Netrion<span>VPS</span></a>
+    <div class="nav-links">
+      <a href="index.html#contact" class="nav-link">Поддержка</a>
+      <a href="index.html" class="nav-link">На главную</a>
+    </div>
+  </div>
+</nav>
+
+<section class="page-header">
+  <div class="container">
+    <div class="header-badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg>
+      Занимает 2 минуты
+    </div>
+    <h1>Подключение Netrion VPS</h1>
+    <p class="page-sub">Скачайте приложение, вставьте ключ — готово</p>
+  </div>
+</section>
+
+<section class="steps">
+  <div class="container">
+
+    <!-- Шаг 1 -->
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">1</div>
+        <div class="step-title">Скачайте приложение</div>
+      </div>
+      <div class="step-text">Выберите приложение для вашего устройства. Все бесплатные.</div>
+
+      <!-- Happ — Россия -->
+      <div class="app-section">
+        <div class="app-section-label">
+          <span class="dot dot-green"></span>
+          Happ — Российский App Store
+        </div>
+        <div class="app-grid">
+          <a href="https://apps.apple.com/ru/app/happ-proxy-utility-plus/id6746188973" target="_blank" class="app-btn">
+            <div class="app-icon">🍏</div>
+            <div>
+              <div class="app-label">iPhone / iPad</div>
+              <div class="app-name">App Store RU</div>
+            </div>
+          </a>
+          <a href="https://play.google.com/store/apps/details?id=com.happproxy&pcampaignid=web_share" target="_blank" class="app-btn">
+            <div class="app-icon">🤖</div>
+            <div>
+              <div class="app-label">Android</div>
+              <div class="app-name">Google Play</div>
+            </div>
+          </a>
+          <a href="https://github.com/Happ-proxy/happ-desktop/releases/latest/download/setup-Happ.x64.exe" target="_blank" class="app-btn">
+            <div class="app-icon">💻</div>
+            <div>
+              <div class="app-label">Windows</div>
+              <div class="app-name">Скачать .exe</div>
+            </div>
+          </a>
+          <a href="https://github.com/Happ-proxy/happ-android/releases/latest/download/Happ.apk" target="_blank" class="app-btn">
+            <div class="app-icon">📦</div>
+            <div>
+              <div class="app-label">Без Google Play</div>
+              <div class="app-name">Скачать APK</div>
+            </div>
+          </a>
+        </div>
+        <div class="app-note"><strong>Рекомендуем</strong> — основное приложение для большинства пользователей</div>
+      </div>
+
+      <!-- Happ — Международный -->
+      <div class="app-section" style="margin-top: 12px;">
+        <div class="app-section-label">
+          <span class="dot dot-blue"></span>
+          Happ — Международный App Store
+        </div>
+        <div class="app-grid">
+          <a href="https://apps.apple.com/app/happ-proxy-utility-plus/id6746188973" target="_blank" class="app-btn">
+            <div class="app-icon">🌍</div>
+            <div>
+              <div class="app-label">iPhone / iPad</div>
+              <div class="app-name">App Store</div>
+            </div>
+          </a>
+          <a href="https://play.google.com/store/apps/details?id=com.happproxy&pcampaignid=web_share" target="_blank" class="app-btn">
+            <div class="app-icon">🌍</div>
+            <div>
+              <div class="app-label">Android</div>
+              <div class="app-name">Google Play</div>
+            </div>
+          </a>
+        </div>
+        <div class="app-note"><strong>Для зарубежных Apple ID</strong> — если ваш App Store не российский</div>
+      </div>
+
+      <!-- V2RayTun — Международный -->
+      <div class="app-section" style="margin-top: 12px;">
+        <div class="app-section-label">
+          <span class="dot dot-accent"></span>
+          V2RayTun — альтернатива
+        </div>
+        <div class="app-grid-3">
+          <a href="https://apps.apple.com/app/v2raytun/id6476628951" target="_blank" class="app-btn">
+            <div class="app-icon">📡</div>
+            <div>
+              <div class="app-label">iOS</div>
+              <div class="app-name">App Store</div>
+            </div>
+          </a>
+          <a href="https://play.google.com/store/apps/details?id=com.v2raytun.android" target="_blank" class="app-btn">
+            <div class="app-icon">📡</div>
+            <div>
+              <div class="app-label">Android</div>
+              <div class="app-name">Google Play</div>
+            </div>
+          </a>
+          <a href="https://github.com/nicevpn/nicevpn/releases/latest/download/nicevpn.apk" target="_blank" class="app-btn">
+            <div class="app-icon">📡</div>
+            <div>
+              <div class="app-label">Android</div>
+              <div class="app-name">APK</div>
+            </div>
+          </a>
+        </div>
+        <div class="app-note"><strong>Международный</strong> — только для зарубежных аккаунтов Apple / Google</div>
+      </div>
+
+      <div class="warn">
+        <span class="warn-icon">💡</span>
+        <strong>Windows:</strong> запускайте от имени администратора. Выберите режим <strong style="color:var(--text);">TUN (Туннель)</strong>
+      </div>
+    </div>
+
+    <!-- Шаг 2 -->
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">2</div>
+        <div class="step-title">Скопируйте ваш ключ</div>
+      </div>
+      <div class="step-text">
+        Ключ пришёл на вашу почту после оплаты — скопируйте его целиком.
+      </div>
+      <div class="hint"><strong>Не пришло?</strong> Проверьте папку «Спам». Не нашли — напишите в поддержку.</div>
+    </div>
+
+    <!-- Шаг 3 -->
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">3</div>
+        <div class="step-title">Вставьте ключ в приложение</div>
+      </div>
+      <div class="step-text">
+        Откройте приложение → нажмите
+        <strong style="color:var(--text);">+</strong> →
+        <strong style="color:var(--text);">Добавить из буфера</strong>
+      </div>
+      <div class="hint"><strong>Ключ вводится один раз.</strong> Дальше просто включайте и выключайте подключение.</div>
+    </div>
+
+    <!-- Шаг 4 -->
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">4</div>
+        <div class="step-title">Подключитесь</div>
+      </div>
+      <div class="step-text">
+        Выберите сервер → нажмите
+        <strong style="color:var(--green);">Подключить</strong> → готово!
+      </div>
+      <div class="hint"><strong>Не работает?</strong> Попробуйте другой сервер. Не помогло — напишите в поддержку.</div>
+    </div>
+
+    <!-- Done Block -->
+    <div class="done">
+      <div class="done-icon">🛡️</div>
+      <div class="done-title">Готово — вы защищены</div>
+      <div class="done-text">Подключение активно. Подписка продлевается автоматически.</div>
+    </div>
+
+  </div>
+</section>
+
+<section class="help">
+  <div class="container">
+    <div class="help-title">Нужна помощь?</div>
+    <div class="help-links">
+      <a href="https://t.me/netriovps_support" target="_blank" class="help-link">💬 Telegram</a>
+      <a href="https://t.me/netriovpspay_bot" target="_blank" class="help-link">🤖 Бот</a>
+      <a href="/#contact" class="help-link">✉️ Написать</a>
+      <a href="/" class="help-link">← На главную</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-logo">Netrion<span>VPS</span></div>
+      <div>© 2026 Netrion VPS</div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
